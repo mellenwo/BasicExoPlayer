@@ -1,11 +1,13 @@
 package com.example.myapplication
 
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.exoplayer2.ExoPlayerFactory
 import com.google.android.exoplayer2.SimpleExoPlayer
-import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.dash.DashMediaSource
+import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -17,11 +19,12 @@ class PlayerActivity : AppCompatActivity() {
     private var exoPlayer : SimpleExoPlayer? = null
 
     companion object {
-        private const val DISNEY_MEDIA_SOURCE_URI = "https://html5demos.com/assets/dizzy.mp4"
+        private const val DISNEY_MEDIA_SOURCE_URI = "https://yt-dash-mse-test.commondatastorage.googleapis.com/media/motion-20120802-manifest.mpd"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
         setContentView(R.layout.activity_player)
         preparePlayer()
     }
@@ -40,12 +43,8 @@ class PlayerActivity : AppCompatActivity() {
         exoPlayer?.playWhenReady = true
     }
 
-    private fun createMediaSource(dataSource: DefaultDataSourceFactory): ExtractorMediaSource? {
-        return ExtractorMediaSource.Factory(dataSource).createMediaSource(
-            Uri.parse(
-                DISNEY_MEDIA_SOURCE_URI
-            )
-        )
+    private fun createMediaSource(dataSource: DefaultDataSourceFactory): DashMediaSource? {
+        return DashMediaSource(Uri.parse(DISNEY_MEDIA_SOURCE_URI), dataSource, DefaultDashChunkSource.Factory(dataSource), null, null)
     }
 
     private fun createDataSource() =
@@ -55,8 +54,6 @@ class PlayerActivity : AppCompatActivity() {
         onBackPressed()
         return true
     }
-
-
 
     override fun onDestroy() {
         super.onDestroy()

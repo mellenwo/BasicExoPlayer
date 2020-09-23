@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -18,11 +19,12 @@ class PlayerActivity : AppCompatActivity() {
     private var exoPlayer : SimpleExoPlayer? = null
 
     companion object {
-        private const val DISNEY_MEDIA_SOURCE_URI = "http://yt-dash-mse-test.commondatastorage.googleapis.com/media/motion-20120802-manifest.mpd"
+        private const val DISNEY_MEDIA_SOURCE_URI = "https://yt-dash-mse-test.commondatastorage.googleapis.com/media/motion-20120802-manifest.mpd"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
         setContentView(R.layout.activity_player)
         preparePlayer()
     }
@@ -52,8 +54,6 @@ class PlayerActivity : AppCompatActivity() {
         onBackPressed()
         return true
     }
-
-
 
     override fun onDestroy() {
         super.onDestroy()

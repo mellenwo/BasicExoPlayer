@@ -23,12 +23,15 @@ class PlayerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
+        preparePlayer()
+    }
+
+    private fun preparePlayer() {
         exoPlayer = ExoPlayerFactory.newSimpleInstance(this, DefaultTrackSelector())
         player_view.player = exoPlayer
 
-        val dataSource = DefaultDataSourceFactory(this, Util.getUserAgent(this, "exo-demo"))
-        val mediaSource = ExtractorMediaSource.Factory(dataSource).createMediaSource(Uri.parse(
-            DISNEY_MEDIA_SOURCE_URI))
+        val dataSource = createDataSource()
+        val mediaSource = createMediaSource(dataSource)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
         supportActionBar?.setDisplayShowHomeEnabled(true);
@@ -36,6 +39,17 @@ class PlayerActivity : AppCompatActivity() {
         exoPlayer?.prepare(mediaSource)
         exoPlayer?.playWhenReady = true
     }
+
+    private fun createMediaSource(dataSource: DefaultDataSourceFactory): ExtractorMediaSource? {
+        return ExtractorMediaSource.Factory(dataSource).createMediaSource(
+            Uri.parse(
+                DISNEY_MEDIA_SOURCE_URI
+            )
+        )
+    }
+
+    private fun createDataSource() =
+        DefaultDataSourceFactory(this, Util.getUserAgent(this, "exo-demo"))
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()

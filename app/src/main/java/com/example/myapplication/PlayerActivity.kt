@@ -11,6 +11,7 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import kotlinx.android.synthetic.main.activity_player.*
 
+
 class PlayerActivity : AppCompatActivity() {
 
     private var exoPlayer : SimpleExoPlayer? = null
@@ -29,9 +30,19 @@ class PlayerActivity : AppCompatActivity() {
         val mediaSource = ExtractorMediaSource.Factory(dataSource).createMediaSource(Uri.parse(
             DISNEY_MEDIA_SOURCE_URI))
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true);
+        supportActionBar?.setDisplayShowHomeEnabled(true);
+
         exoPlayer?.prepare(mediaSource)
         exoPlayer?.playWhenReady = true
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
